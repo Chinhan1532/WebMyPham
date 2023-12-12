@@ -1,0 +1,34 @@
+package vn.cosmetics.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import vn.cosmetics.connection.connectDB;
+import vn.cosmetics.model.Admin;
+
+
+
+public class  AdminLoginDao {
+	public static boolean checkAdminLogin (String username, String password) {
+		boolean exist = false;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			String sql = "select * from admins where username=? and password=?";
+			Connection con = connectDB.getConnect();
+			PreparedStatement st = con.prepareStatement(sql);
+			st.setString(1, username);
+			st.setString(2, password);
+			ResultSet rs;
+			rs = st.executeQuery();
+		    exist = rs.next();
+		    Admin admin = new Admin();
+		    String name = rs.getString("name");
+		    admin.setName(name);
+		    } catch (Exception e) {
+			e.printStackTrace();
+		}
+		return exist;
+	}
+
+}
